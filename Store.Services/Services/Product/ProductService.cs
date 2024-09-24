@@ -31,7 +31,7 @@ namespace Store.Services.Services
                 CategoryName = p.Category.Name,
                 PictureUrl = p.PictureUrl,
                 BrandName = p.Brand.Name
-            }).Include( => p.Category).Include(p => p.Brand).ToList();
+            }).Include(p => p.Category).Include(p => p.Brand).ToList();
 
             return mappedProducts;
         }

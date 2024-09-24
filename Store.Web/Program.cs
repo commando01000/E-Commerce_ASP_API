@@ -1,12 +1,13 @@
 
 using Microsoft.EntityFrameworkCore;
 using Store.Data.Contexts;
+using Store.Repository;
 
 namespace Store.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,22 @@ namespace Store.Web
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            using (var Service = app.Services.CreateScope())
+            {
+                var LoggerFactory = Service.ServiceProvider.GetRequiredService<ILoggerFactory>();
+                try
+                {
+                    var context = Service.ServiceProvider.GetRequiredService<StoreDBContext>();
+                    await StoreContextSeed.SeedAsync(context, LoggerFactory);
+                }
+                catch (Exception ex)
+                {
+                    var logger = LoggerFactory.CreateLogger<StoreContextSeed>();
+                    logger.LogError(ex.Message);
+                }
+
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

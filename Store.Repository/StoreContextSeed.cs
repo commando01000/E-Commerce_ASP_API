@@ -18,32 +18,35 @@ namespace Store.Repository
             {
                 if (context.ProductBrands != null && !context.ProductBrands.Any())
                 {
-                    var brandsData = File.ReadAllText("../Store.Repository/SeetData/brands.json");
+                    var brandsData = File.ReadAllText("../Store.Repository/SeedData/brands.json");
                     var Brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
                     if (Brands is not null)
                     {
                         await context.ProductBrands.AddRangeAsync(Brands);
+                        await context.SaveChangesAsync();
                     }
                 }
                 if (context.ProductCategories != null && !context.ProductCategories.Any())
                 {
-                    var categoriesData = File.ReadAllText("../Store.Repository/SeetData/brands.json");
+                    var categoriesData = File.ReadAllText("../Store.Repository/SeedData/types.json");
                     var Categories = JsonSerializer.Deserialize<List<ProductCategory>>(categoriesData);
                     if (Categories is not null)
                     {
                         await context.ProductCategories.AddRangeAsync(Categories);
+                        await context.SaveChangesAsync();
                     }
                 }
                 if (context.Products != null && !context.Products.Any())
                 {
-                    var productsData = File.ReadAllText("../Store.Repository/SeetData/brands.json");
+                    var productsData = File.ReadAllText("../Store.Repository/SeedData/products.json");
                     var Products = JsonSerializer.Deserialize<List<Product>>(productsData);
                     if (Products is not null)
                     {
                         await context.Products.AddRangeAsync(Products);
+                        await context.SaveChangesAsync();
                     }
                 }
-                await context.SaveChangesAsync();
+
             }
             catch (Exception ex)
             {

@@ -25,8 +25,10 @@ namespace Store.Services.Services
             var products = await _unitOfWork.Repository<Product, int>().GetAll().Include(p => p.Category)
                                      .Include(p => p.Brand)
                                      .ToListAsync();
-            // map products to ProductDetailsDto
 
+            // map products to ProductDetailsDto
+            // concat baseUrl located in Appsetting.json using IConfiguring with image url
+            var baseUrl = _configuration["BaseUrl"];
             var mappedProducts = products.Select(p => new ProductDetailsDto
             {
                 Id = p.Id,
@@ -34,8 +36,8 @@ namespace Store.Services.Services
                 Description = p.Description,
                 Price = p.Price,
                 CategoryName = p.Category.Name,
-                PictureUrl = p.PictureUrl,
-                BrandName = p.Brand.Name
+                PictureUrl = baseUrl + p.PictureUrl,
+                BrandName = p.Brand.Name,
             });
 
             return mappedProducts;
@@ -56,7 +58,9 @@ namespace Store.Services.Services
                 Price = product.Price,
                 CategoryName = product.Category.Name,
                 PictureUrl = baseUrl + product.PictureUrl,
-                BrandName = product.Brand.Name
+                BrandName = product.Brand.Name,
+                Category = product.Category,
+                Brand = product.Brand
             };
             return mappedProduct;
         }
@@ -74,7 +78,7 @@ namespace Store.Services.Services
         public void RemoveProduct(int id)
         {
             var productEntity = _unitOfWork.Repository<Product, int>().GetAll().FirstOrDefault(p => p.Id == id);
-            
+
             this._unitOfWork.Repository<Product, int>().DeleteAsync(productEntity);
         }
     }

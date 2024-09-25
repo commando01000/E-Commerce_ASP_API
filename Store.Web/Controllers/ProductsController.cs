@@ -44,6 +44,7 @@ namespace Store.Web.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            this._productService.RemoveProduct(id);
         }
     }
 }

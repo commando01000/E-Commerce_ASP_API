@@ -38,7 +38,6 @@ namespace Store.Web
                     var logger = LoggerFactory.CreateLogger<StoreContextSeed>();
                     logger.LogError(ex.Message);
                 }
-
             }
 
             // Configure the HTTP request pipeline.

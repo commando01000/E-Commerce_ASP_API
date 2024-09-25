@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Store.Data.Entities;
 using Store.Repository.Interfaces;
 using Store.Services.Services;
@@ -13,9 +14,11 @@ namespace Store.Services.Services
     public class ProductService : IProductService
     {
         private IUnitOfWork _unitOfWork;
-        public ProductService(IUnitOfWork unitOfWork)
+        private readonly IConfiguration _configuration;
+        public ProductService(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             this._unitOfWork = unitOfWork;
+            this._configuration = configuration;
         }
         public async Task<IEnumerable<ProductDetailsDto>> GetAllProducts()
         {
@@ -43,6 +46,8 @@ namespace Store.Services.Services
             var product = await _unitOfWork.Repository<Product, int>().GetAll().Include(p => p.Category)
                                      .Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id);
 
+            // concat baseUrl located in Appsetting.json using IConfiguring with image url
+            var baseUrl = _configuration["BaseUrl"];
             var mappedProduct = new ProductDetailsDto
             {
                 Id = product.Id,
@@ -50,7 +55,7 @@ namespace Store.Services.Services
                 Description = product.Description,
                 Price = product.Price,
                 CategoryName = product.Category.Name,
-                PictureUrl = product.PictureUrl,
+                PictureUrl = baseUrl + product.PictureUrl,
                 BrandName = product.Brand.Name
             };
             return mappedProduct;
@@ -64,6 +69,13 @@ namespace Store.Services.Services
         public Task<IEnumerable<ProductDetailsDto>> GetProductsByName(string name)
         {
             throw new NotImplementedException();
+        }
+
+        public void RemoveProduct(int id)
+        {
+            var productEntity = _unitOfWork.Repository<Product, int>().GetAll().FirstOrDefault(p => p.Id == id);
+            
+            this._unitOfWork.Repository<Product, int>().DeleteAsync(productEntity);
         }
     }
 }

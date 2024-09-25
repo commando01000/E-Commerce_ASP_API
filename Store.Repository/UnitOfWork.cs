@@ -26,6 +26,12 @@ namespace Store.Repository
             if (_repositories is null)
             {
                 _repositories = new Hashtable();
+                if (!_repositories.ContainsKey(typeof(TEntity).Name))
+                {
+                    var RepoType = typeof(GenericRepository<,>);
+                    var RepoInstance = Activator.CreateInstance(RepoType.MakeGenericType(typeof(TEntity), typeof(TKey)), _context);
+                    _repositories.Add(typeof(TEntity).Name, RepoInstance);
+                }
             }
             else
             {

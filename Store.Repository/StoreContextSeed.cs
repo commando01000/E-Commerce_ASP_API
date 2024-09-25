@@ -23,7 +23,6 @@ namespace Store.Repository
                     if (Brands is not null)
                     {
                         await context.ProductBrands.AddRangeAsync(Brands);
-                        await context.SaveChangesAsync();
                     }
                 }
                 if (context.ProductCategories != null && !context.ProductCategories.Any())
@@ -33,7 +32,6 @@ namespace Store.Repository
                     if (Categories is not null)
                     {
                         await context.ProductCategories.AddRangeAsync(Categories);
-                        await context.SaveChangesAsync();
                     }
                 }
                 if (context.Products != null && !context.Products.Any())
@@ -43,10 +41,9 @@ namespace Store.Repository
                     if (Products is not null)
                     {
                         await context.Products.AddRangeAsync(Products);
-                        await context.SaveChangesAsync();
                     }
                 }
-
+                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

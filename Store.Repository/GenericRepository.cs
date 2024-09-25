@@ -28,12 +28,12 @@ namespace Store.Repository
             _context.Set<TEntity>().Remove(entity);
         }
 
-        public async Task<IQueryable<TEntity>> GetAllAsync()
+        public IQueryable<TEntity> GetAll()
         {
-            return (IQueryable<TEntity>)await _context.Set<TEntity>().ToListAsync();
+            return _context.Set<TEntity>();
         }
 
-        public async Task<TEntity> GetByIdAsync(TKey id)
+        public async Task<TEntity> GetById(TKey id)
         {
             return await _context.Set<TEntity>().FindAsync(id);
         }

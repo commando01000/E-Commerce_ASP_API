@@ -19,7 +19,9 @@ namespace Store.Services.Services
         }
         public async Task<IEnumerable<ProductDetailsDto>> GetAllProducts()
         {
-            var products = await _unitOfWork.Repository<Product, int>().GetAllAsync();
+            var products = await _unitOfWork.Repository<Product, int>().GetAll().Include(p => p.Category)
+                                     .Include(p => p.Brand)
+                                     .ToListAsync();
             // map products to ProductDetailsDto
 
             var mappedProducts = products.Select(p => new ProductDetailsDto
@@ -31,14 +33,15 @@ namespace Store.Services.Services
                 CategoryName = p.Category.Name,
                 PictureUrl = p.PictureUrl,
                 BrandName = p.Brand.Name
-            }).Include(p => p.Category).Include(p => p.Brand).ToList();
+            });
 
             return mappedProducts;
         }
 
         public async Task<ProductDetailsDto> GetProductById(int id)
         {
-            var product = await _unitOfWork.Repository<Product, int>().GetByIdAsync(id);
+            var product = await _unitOfWork.Repository<Product, int>().GetAll().Include(p => p.Category)
+                                     .Include(p => p.Brand).FirstOrDefaultAsync(p => p.Id == id);
 
             var mappedProduct = new ProductDetailsDto
             {

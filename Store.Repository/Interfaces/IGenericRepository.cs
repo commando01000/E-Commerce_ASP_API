@@ -9,9 +9,8 @@ namespace Store.Repository.Interfaces
 {
     public interface IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
-        public Task<IQueryable<TEntity>> GetAllAsync();
-
-        public Task<TEntity> GetByIdAsync(TKey id);
+        public IQueryable<TEntity> GetAll();
+        public Task<TEntity> GetById(TKey id);
         public Task AddAsync(TEntity entity);
         public void UpdateAsync(TEntity entity);
         public void DeleteAsync(TEntity entity);

@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Store.Data.Contexts;
 using Store.Data.Entities;
 using Store.Repository.Interfaces;
+using Store.Repository.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Store.Repository
         {
             this._context = context;
         }
+
         public async Task AddAsync(TEntity entity)
         {
             await _context.Set<TEntity>().AddAsync(entity);
@@ -33,11 +35,21 @@ namespace Store.Repository
             return _context.Set<TEntity>();
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllWithSpecifications(ISpecification<TEntity> specs)
+        {
+            return await SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>().AsQueryable(), specs).ToListAsync();
+        }
+
         public async Task<TEntity> GetById(TKey id)
         {
             return await _context.Set<TEntity>().FindAsync(id);
         }
 
+        public async Task<TEntity> GetByIdWithSpecifications(ISpecification<TEntity> specs)
+        {
+           return await SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), specs).FirstOrDefaultAsync();
+        }
+         
         public void UpdateAsync(TEntity entity)
         {
             _context.Set<TEntity>().Update(entity);

@@ -2,10 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Store.Data.Entities;
 using Store.Repository.Interfaces;
+using Store.Repository.Specifications;
+using Store.Repository.Specifications.ProductSpecs;
 using Store.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,6 +42,26 @@ namespace Store.Services.Services
                 PictureUrl = baseUrl + p.PictureUrl,
                 BrandName = p.Brand.Name,
             });
+
+            return mappedProducts;
+        }
+
+        public async Task<IEnumerable<ProductDetailsDto>> GetAllProductsWithSpecs(ProductSpecifications specs)
+        {
+            var ProductSpec = new ProductWithSpecifications(specs);
+            
+            var products = await _unitOfWork.Repository<Product, int>().GetAllWithSpecifications(ProductSpec);
+            
+            var mappedProducts = products.Select(product => new ProductDetailsDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                CategoryName = product.Category?.Name, // Handle nulls if needed
+                PictureUrl = product.PictureUrl,
+                BrandName = product.Brand?.Name // Handle nulls if needed
+            }).ToList();
 
             return mappedProducts;
         }

@@ -1,4 +1,5 @@
-﻿using Store.Services.Services;
+﻿using Store.Repository.Specifications.ProductSpecs;
+using Store.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Store.Services.Services
     public interface IProductService
     {
         public Task<IEnumerable<ProductDetailsDto>> GetAllProducts();
+        public Task<IEnumerable<ProductDetailsDto>> GetAllProductsWithSpecs(ProductSpecifications specs);
         public Task<ProductDetailsDto> GetProductById(int id);
         public Task<IEnumerable<ProductDetailsDto>> GetProductsByCategory(int id);
         public Task<IEnumerable<ProductDetailsDto>> GetProductsByName(string name);

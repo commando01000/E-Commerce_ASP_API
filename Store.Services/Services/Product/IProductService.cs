@@ -13,6 +13,7 @@ namespace Store.Services.Services
         public Task<IEnumerable<ProductDetailsDto>> GetAllProducts();
         public Task<IEnumerable<ProductDetailsDto>> GetAllProductsWithSpecs(ProductSpecifications specs);
         public Task<ProductDetailsDto> GetProductById(int id);
+        public Task<ProductDetailsDto> GetProductByIdWithSpecs(int id);
         public Task<IEnumerable<ProductDetailsDto>> GetProductsByCategory(int id);
         public Task<IEnumerable<ProductDetailsDto>> GetProductsByName(string name);
         public void RemoveProduct(int id);

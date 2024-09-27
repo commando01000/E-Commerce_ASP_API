@@ -49,9 +49,9 @@ namespace Store.Services.Services
         public async Task<IEnumerable<ProductDetailsDto>> GetAllProductsWithSpecs(ProductSpecifications specs)
         {
             var ProductSpec = new ProductWithSpecifications(specs);
-            
+
             var products = await _unitOfWork.Repository<Product, int>().GetAllWithSpecifications(ProductSpec);
-            
+
             var mappedProducts = products.Select(product => new ProductDetailsDto
             {
                 Id = product.Id,
@@ -64,6 +64,26 @@ namespace Store.Services.Services
             }).ToList();
 
             return mappedProducts;
+        }
+
+        public async Task<ProductDetailsDto> GetProductByIdWithSpecs(int id)
+        {
+            var specs = new ProductWithSpecifications(id);
+
+            var product = await _unitOfWork.Repository<Product, int>().GetByIdWithSpecifications(specs);
+
+            var mappedProduct = new ProductDetailsDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                CategoryName = product.Category?.Name, // Handle nulls if needed
+                PictureUrl = product.PictureUrl,
+                BrandName = product.Brand?.Name // Handle nulls if needed
+            };
+
+            return mappedProduct;
         }
 
         public async Task<ProductDetailsDto> GetProductById(int id)

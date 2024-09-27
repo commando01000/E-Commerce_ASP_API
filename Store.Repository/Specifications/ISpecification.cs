@@ -13,5 +13,8 @@ namespace Store.Repository.Specifications
         Expression<Func<T, bool>> Criteria { get; }
         // Includes
         List<Expression<Func<T, object>>> Includes { get; }
+        Expression<Func<T, object>> OrderByAsc { get; }
+        Expression<Func<T, object>> OrderByDesc { get; }
+
     }
 }

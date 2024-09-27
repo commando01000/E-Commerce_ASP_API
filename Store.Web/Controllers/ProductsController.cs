@@ -29,6 +29,12 @@ namespace Store.Web.Controllers
             return await this._productService.GetProductById(id);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ProductDetailsDto> GetProductByIdWithSpecs(int id)
+        {
+            return await this._productService.GetProductByIdWithSpecs(id);
+        }
+
         // POST api/<ProductsController>
         [HttpPost]
         public void Post([FromBody] string value)

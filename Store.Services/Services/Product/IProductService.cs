@@ -1,11 +1,4 @@
-﻿using Store.Data.Entities;
-using Store.Repository.Specifications.ProductSpecs;
-using Store.Services.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Store.Repository.Specifications.ProductSpecs;
 
 namespace Store.Services.Services
 {

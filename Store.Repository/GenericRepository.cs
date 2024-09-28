@@ -1,14 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Store.Data.Contexts;
 using Store.Data.Entities;
 using Store.Repository.Interfaces;
 using Store.Repository.Specifications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Store.Repository
 {
@@ -47,7 +41,7 @@ namespace Store.Repository
 
         public async Task<TEntity> GetByIdWithSpecifications(ISpecification<TEntity> specs)
         {
-           return await SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), specs).FirstOrDefaultAsync();
+            return await SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), specs).FirstOrDefaultAsync();
         }
 
         public async Task<int> GetProductsCount(ISpecification<TEntity> specs)

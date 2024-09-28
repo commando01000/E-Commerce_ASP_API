@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Store.Repository.Specifications
 {
@@ -29,7 +24,7 @@ namespace Store.Repository.Specifications
                 query = query.OrderByDescending(spec.OrderByDesc);
             }
 
-            if(spec.IsPaginated)
+            if (spec.IsPaginated)
             {
                 query = query.Skip(spec.Skip).Take(spec.Take);
             }

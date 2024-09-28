@@ -21,6 +21,12 @@ namespace Store.Repository.Specifications
 
         public Expression<Func<T, object>> OrderByDesc { get; private set; }
 
+        public int Take { get; private set; }
+
+        public int Skip { get; private set; }
+
+        public bool IsPaginated { get; private set; }
+
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             this.Includes.Add(includeExpression);
@@ -32,6 +38,12 @@ namespace Store.Repository.Specifications
         protected void AddOrderByDesc(Expression<Func<T, object>> orderByExpression)
         {
             this.OrderByDesc = orderByExpression;
+        }
+        protected void ApplyPaging(int skip, int take)
+        {
+            this.Skip = skip;
+            this.Take = take;
+            this.IsPaginated = true;
         }
     }
 }

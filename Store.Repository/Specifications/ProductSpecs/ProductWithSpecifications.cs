@@ -13,10 +13,12 @@ namespace Store.Repository.Specifications
     {
         public ProductWithSpecifications(ProductSpecifications specs) :
              base(product => (!specs.BrandId.HasValue || product.BrandId == specs.BrandId.Value) &&
-                (!specs.CategoryId.HasValue || product.CategoryId == specs.CategoryId.Value))
+                (!specs.CategoryId.HasValue || product.CategoryId == specs.CategoryId.Value) && (specs.Search == null || product.Name.Contains(specs.Search))
+             )
         {
             AddInclude(product => product.Brand);
             AddInclude(product => product.Category);
+            ApplyPaging(specs.PageSize * (specs.PageIndex - 1), specs.PageSize);
 
             if (!String.IsNullOrEmpty(specs.Sort))
             {

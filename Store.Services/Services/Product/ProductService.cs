@@ -66,6 +66,30 @@ namespace Store.Services.Services
             return mappedProducts;
         }
 
+        public async Task<PaginatedResultDto<ProductDetailsDto>> GetAllProductsWithPaging(ProductSpecifications specs)
+        {
+            var ProductSpec = new ProductWithSpecifications(specs);
+
+            var products = await _unitOfWork.Repository<Product, int>().GetAllWithSpecifications(ProductSpec);
+
+            var mappedProducts = products.Select(product => new ProductDetailsDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                CategoryName = product.Category?.Name, // Handle nulls if needed
+                PictureUrl = product.PictureUrl,
+                BrandName = product.Brand?.Name // Handle nulls if needed
+            }).ToList();
+
+            var ProductsCountSpec = new ProductWithCountSpecs(specs);
+
+            var productsCount = await _unitOfWork.Repository<Product, int>().GetProductsCount(ProductsCountSpec);
+
+            return new PaginatedResultDto<ProductDetailsDto>(productsCount, specs.PageIndex, specs.PageSize, mappedProducts);
+        }
+
         public async Task<ProductDetailsDto> GetProductByIdWithSpecs(int id)
         {
             var specs = new ProductWithSpecifications(id);
@@ -124,5 +148,6 @@ namespace Store.Services.Services
 
             this._unitOfWork.Repository<Product, int>().DeleteAsync(productEntity);
         }
+
     }
 }

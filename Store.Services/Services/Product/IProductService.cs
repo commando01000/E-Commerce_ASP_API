@@ -1,4 +1,5 @@
-﻿using Store.Repository.Specifications.ProductSpecs;
+﻿using Store.Data.Entities;
+using Store.Repository.Specifications.ProductSpecs;
 using Store.Services.Services;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Store.Services.Services
     {
         public Task<IEnumerable<ProductDetailsDto>> GetAllProducts();
         public Task<IEnumerable<ProductDetailsDto>> GetAllProductsWithSpecs(ProductSpecifications specs);
+        public Task<PaginatedResultDto<ProductDetailsDto>> GetAllProductsWithPaging(ProductSpecifications specs);
         public Task<ProductDetailsDto> GetProductById(int id);
         public Task<ProductDetailsDto> GetProductByIdWithSpecs(int id);
         public Task<IEnumerable<ProductDetailsDto>> GetProductsByCategory(int id);

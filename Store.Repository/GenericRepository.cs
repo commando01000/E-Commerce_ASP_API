@@ -49,7 +49,12 @@ namespace Store.Repository
         {
            return await SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), specs).FirstOrDefaultAsync();
         }
-         
+
+        public async Task<int> GetProductsCount(ISpecification<TEntity> specs)
+        {
+            return await SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), specs).CountAsync();
+        }
+
         public void UpdateAsync(TEntity entity)
         {
             _context.Set<TEntity>().Update(entity);

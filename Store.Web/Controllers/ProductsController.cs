@@ -35,6 +35,12 @@ namespace Store.Web.Controllers
             return await this._productService.GetProductByIdWithSpecs(id);
         }
 
+        [HttpGet]
+        public async Task<PaginatedResultDto<ProductDetailsDto>> GetAllProductsWithPaging([FromQuery] ProductSpecifications input)
+        {
+            return await this._productService.GetAllProductsWithPaging(input);
+        }
+
         // POST api/<ProductsController>
         [HttpPost]
         public void Post([FromBody] string value)

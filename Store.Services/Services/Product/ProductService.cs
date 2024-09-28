@@ -102,7 +102,6 @@ namespace Store.Services.Services
 
             return mappedProduct;
         }
-
         public async Task<ProductDetailsDto> GetProductById(int id)
         {
             var product = await _unitOfWork.Repository<Product, int>().GetAll().Include(p => p.Category)
@@ -124,17 +123,6 @@ namespace Store.Services.Services
             };
             return mappedProduct;
         }
-
-        public Task<IEnumerable<ProductDetailsDto>> GetProductsByCategory(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<ProductDetailsDto>> GetProductsByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
         public void RemoveProduct(int id)
         {
             var productEntity = _unitOfWork.Repository<Product, int>().GetAll().FirstOrDefault(p => p.Id == id);

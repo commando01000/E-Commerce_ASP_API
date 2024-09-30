@@ -28,7 +28,7 @@ namespace Store.Services.Handle_Responses
                 400 => "A bad request, you have made",
                 401 => "Authorized, you are not",
                 403 => "Forbidden: Access denied",
-                404 => "Resource found, it was not",
+                404 => "Not Found ! Page not found",
                 408 => "Request timed out",
                 500 => "Errors are the path to the dark side. Errors lead to anger. Anger leads to hate. Hate leads to career change",
                 502 => "Bad gateway received",

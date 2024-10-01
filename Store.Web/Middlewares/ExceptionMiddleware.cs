@@ -16,7 +16,7 @@ namespace Store.Web.Middlewares
             this.logger = logger;
             this.hostEnvironment = hostEnvironment;
         }
-        public async void InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {

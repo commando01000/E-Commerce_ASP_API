@@ -3,6 +3,7 @@ using Store.Repository.Interfaces;
 using Store.Repository;
 using Store.Services.Services;
 using Store.Services.Handle_Responses;
+using Store.Services.Services.CacheServices;
 
 namespace Store.Web.Extensions
 {
@@ -12,6 +13,8 @@ namespace Store.Web.Extensions
         {
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICacheService, CacheService>();
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

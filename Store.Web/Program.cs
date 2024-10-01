@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using Store.Data.Contexts;
 using Store.Repository;
 using Store.Repository.Interfaces;
@@ -24,6 +25,11 @@ namespace Store.Web
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
+            {
+                return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis"));
+            });
 
             var app = builder.Build();
 

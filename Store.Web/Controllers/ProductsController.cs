@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Store.Repository.Specifications.ProductSpecs;
 using Store.Services.Services;
+using Store.Web.Helper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,6 +18,7 @@ namespace Store.Web.Controllers
         }
         // GET: api/<ProductsController>
         [HttpGet]
+        //[Cache(10)]
         public async Task<IEnumerable<ProductDetailsDto>> Get([FromQuery] ProductSpecifications input)
         {
             return await this._productService.GetAllProductsWithSpecs(input);

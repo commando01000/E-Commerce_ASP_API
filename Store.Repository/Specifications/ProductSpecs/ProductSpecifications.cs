@@ -15,7 +15,7 @@
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
 
-        public string Search
+        public string? Search
         {
             get => _search;
             set => _search = value?.Trim().ToLower();

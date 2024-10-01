@@ -7,10 +7,10 @@ namespace Store.Web.Middlewares
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly ILogger<Exception> logger;
+        private readonly ILogger<ExceptionMiddleware> logger;
         private readonly IHostEnvironment hostEnvironment;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger<Exception> logger, IHostEnvironment hostEnvironment)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment hostEnvironment)
         {
             this.next = next;
             this.logger = logger;
@@ -20,7 +20,7 @@ namespace Store.Web.Middlewares
         {
             try
             {
-                next(context);
+                await next(context);
             }
             catch (Exception ex)
             {

@@ -18,7 +18,7 @@ namespace Store.Web.Controllers
         }
         // GET: api/<ProductsController>
         [HttpGet]
-        //[Cache(10)]
+        [Cache(30)]
         public async Task<IEnumerable<ProductDetailsDto>> Get([FromQuery] ProductSpecifications input)
         {
             return await this._productService.GetAllProductsWithSpecs(input);
@@ -38,6 +38,7 @@ namespace Store.Web.Controllers
         }
 
         [HttpGet]
+        [Cache(30)]
         public async Task<PaginatedResultDto<ProductDetailsDto>> GetAllProductsWithPaging([FromQuery] ProductSpecifications input)
         {
             return await this._productService.GetAllProductsWithPaging(input);

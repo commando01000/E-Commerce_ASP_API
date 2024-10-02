@@ -35,7 +35,7 @@ namespace Store.Web.Helper
             else
             {
                 var executedContext = await next();
-                if (executedContext.Result is OkObjectResult okObjectResult)
+                if (executedContext.Result is ObjectResult okObjectResult)
                 {
                     await _cacheService.SetAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_seconds));
                 }

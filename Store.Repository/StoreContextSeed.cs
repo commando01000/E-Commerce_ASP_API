@@ -38,6 +38,15 @@ namespace Store.Repository
                         await context.Products.AddRangeAsync(Products);
                     }
                 }
+                if (context.DeliveryMethods != null && !context.DeliveryMethods.Any())
+                {
+                    var deliveryData = File.ReadAllText("../Store.Repository/SeedData/delivery.json");
+                    var Deliveries = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+                    if (Deliveries is not null)
+                    {
+                        await context.DeliveryMethods.AddRangeAsync(Deliveries);
+                    }
+                }
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)

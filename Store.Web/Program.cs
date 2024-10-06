@@ -1,8 +1,10 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using Store.Data.Contexts;
+using Store.Data.Entities.Identity;
 using Store.Repository;
 using Store.Repository.Interfaces;
 using Store.Services.Handle_Responses;
@@ -20,8 +22,13 @@ namespace Store.Web
 
             // Add services to the container.
             builder.Services.AddControllers();
+            
             builder.Services.AddDbContext<StoreDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<StoreIdentityDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
+           
             builder.Services.AddApplicationServices();
+            builder.Services.AddIdentityServices();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -39,8 +46,12 @@ namespace Store.Web
                 try
                 {
                     var context = Service.ServiceProvider.GetRequiredService<StoreDBContext>();
+                    var userManager = Service.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+                   
                     await context.Database.MigrateAsync();
+
                     await StoreContextSeed.SeedAsync(context, LoggerFactory);
+                    await StoreIdentityContextSeed.SeedAsync(userManager, LoggerFactory);
                 }
                 catch (Exception ex)
                 {
@@ -62,6 +73,7 @@ namespace Store.Web
 
             app.UseStaticFiles();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

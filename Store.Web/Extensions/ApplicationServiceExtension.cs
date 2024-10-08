@@ -7,6 +7,8 @@ using Store.Services.Services.CacheServices;
 using Store.Repository.Cart.Interfaces;
 using Store.Repository.Cart;
 using Store.Services.Services.Cart.CartServices;
+using Store.Services.Services.TokenServices;
+using Store.Services.Services.UserServices;
 
 namespace Store.Web.Extensions
 {
@@ -19,6 +21,7 @@ namespace Store.Web.Extensions
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

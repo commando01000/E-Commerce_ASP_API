@@ -47,9 +47,12 @@ namespace Store.Web
                 try
                 {
                     var context = Service.ServiceProvider.GetRequiredService<StoreDBContext>();
+                    var context2 = Service.ServiceProvider.GetRequiredService<StoreIdentityDBContext>();
+                    
                     var userManager = Service.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
                    
                     await context.Database.MigrateAsync();
+                    await context2.Database.MigrateAsync();
 
                     await StoreContextSeed.SeedAsync(context, LoggerFactory);
                     await StoreIdentityContextSeed.SeedAsync(userManager, LoggerFactory);

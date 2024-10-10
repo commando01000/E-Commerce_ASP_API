@@ -13,7 +13,8 @@ namespace Store.Data.Contexts.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> Order)
         {
-            Order.OwnsOne(o => o.ShippingAddress);
+            Order.OwnsOne(o => o.ShippingAddress, sa => sa.WithOwner());
+            Order.HasMany(o => o.OrderItems).WithOne().OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

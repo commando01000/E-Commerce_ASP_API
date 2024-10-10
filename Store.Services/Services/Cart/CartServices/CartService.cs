@@ -27,7 +27,7 @@ namespace Store.Services.Services.Cart.CartServices
         {
             var cart = await _cartRepository.GetAsync(id);
 
-            if(cart == null)
+            if (cart == null)
             {
                 return new CartDto();
             }

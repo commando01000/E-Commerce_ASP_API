@@ -21,7 +21,7 @@ namespace Store.Services.Services.Cart.Dtos
         [Range(0.1, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public double Price { get; set; }
         [Required]
-        public string PictureUrl { get; set; }
+        public string? PictureUrl { get; set; }
         public string BrandName { get; set; }
         public string CategoryName { get; set; }
     }

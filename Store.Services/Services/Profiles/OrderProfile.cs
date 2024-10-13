@@ -16,11 +16,12 @@ namespace Store.Services.Services.Profiles
             CreateMap<ShippingAddress, ShippingAddressDto>().ReverseMap();
             CreateMap<Order, OrderDetailsDto>()
                 .ForMember(x => x.ShippingPrice, x => x.MapFrom(y => y.DeliveryMethod.Price))
-                .ForMember(x => x.DeliveryMethodName, x => x.MapFrom(y => y.DeliveryMethod.ShortName)).ReverseMap().ReverseMap();
-           
+                .ForMember(x => x.DeliveryMethodName, x => x.MapFrom(y => y.DeliveryMethod.ShortName)).ReverseMap();
+
             CreateMap<OrderItem, OrderItemDto>()
                 .ForMember(x => x.ProductName, x => x.MapFrom(y => y.ProductItem.Name))
-                .ForMember(x => x.Price, x => x.MapFrom(y => y.ProductItem.Price)).ForMember(x => x.PictureUrl, x => x.MapFrom(y => y.ProductItem.PictureUrl)).ReverseMap();
+                .ForMember(x => x.Price, x => x.MapFrom(y => y.ProductItem.Price))
+                .ForMember(x => x.PictureUrl, x => x.MapFrom(y => y.ProductItem.PictureUrl)).ReverseMap();
         }
     }
 }

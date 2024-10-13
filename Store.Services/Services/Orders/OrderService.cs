@@ -80,16 +80,7 @@ namespace Store.Services.Services.Ordersz
 
             #endregion
 
-            //var mappedShippedAddress = new ShippingAddressDto
-            //{
-            //    FirstName = order.ShippingAddressDto.FirstName,
-            //    LastName = order.ShippingAddressDto.LastName,
-            //    City = order.ShippingAddressDto.City,
-            //    State = order.ShippingAddressDto.State,
-            //    Street = order.ShippingAddressDto.Street,
-            //    ZipCode = order.ShippingAddressDto.ZipCode
-            //};
-            var mappedShippedAddress = mapper.Map<ShippingAddressDto>(order.ShippingAddressDto);
+            //var mappedShippedAddress = mapper.Map<ShippingAddressDto>(order.ShippingAddressDto);
 
             var shippedAddress = mapper.Map<ShippingAddress>(order.ShippingAddressDto);
 

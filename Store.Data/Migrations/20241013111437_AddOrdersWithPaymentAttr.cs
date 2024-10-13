@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Store.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Orders_and_OrderItems_Config : Migration
+    public partial class AddOrdersWithPaymentAttr : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,8 +27,10 @@ namespace Store.Data.Migrations
                     ShippingAddress_ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DeliveryMethodId = table.Column<int>(type: "int", nullable: true),
                     OrderStatus = table.Column<int>(type: "int", nullable: false),
-                    CartId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderPaymentStatus = table.Column<int>(type: "int", nullable: false),
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     subTotal = table.Column<double>(type: "float", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

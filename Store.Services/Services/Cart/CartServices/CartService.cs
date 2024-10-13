@@ -32,12 +32,30 @@ namespace Store.Services.Services.Cart.CartServices
                 return new CartDto();
             }
 
+            var mappedCartItems = new List<CartItemDto>();
+            foreach (var cartItem in cart.cartItems)
+            {
+                var mappedCartItem = new CartItemDto
+                {
+                    ProductId = cartItem.ProductId,
+                    Quantity = cartItem.Quantity,
+                    ProductName = cartItem.ProductName,
+                    BrandName = cartItem.BrandName,
+                    CategoryName = cartItem.CategoryName,
+                    Price = cartItem.Price,
+                    PictureUrl = cartItem.PictureUrl
+                };
+
+                mappedCartItems.Add(mappedCartItem);
+            }
+
             var mappedCart = new CartDto
             {
                 id = cart.id,
                 shippingCost = cart.shippingCost.Value,
-                cartItems = cart.cartItems
+                cartItems = mappedCartItems
             };
+
             return mappedCart;
         }
 
@@ -46,20 +64,56 @@ namespace Store.Services.Services.Cart.CartServices
             if (cart.id is null)
                 cart.id = GenerateRandomCartId();
 
+
+            var mappedCartItems = new List<CartItem>();
+            foreach (var cartItem in cart.cartItems)
+            {
+                var mappedCartItem = new CartItem
+                {
+                    ProductId = cartItem.ProductId,
+                    Quantity = cartItem.Quantity,
+                    ProductName = cartItem.ProductName,
+                    BrandName = cartItem.BrandName,
+                    CategoryName = cartItem.CategoryName,
+                    Price = cartItem.Price,
+                    PictureUrl = cartItem.PictureUrl
+                };
+
+                mappedCartItems.Add(mappedCartItem);
+            }
+
             var mappedCart = new CustomerCart
             {
                 id = cart.id,
                 shippingCost = cart.shippingCost,
-                cartItems = cart.cartItems
+                cartItems = mappedCartItems
             };
 
             var updatedCart = await _cartRepository.UpdateAsync(mappedCart);
+
+            var mappedCartItemsDto = new List<CartItemDto>();
+
+            foreach (var cartItem in cart.cartItems)
+            {
+                var mappedCartItem = new CartItemDto
+                {
+                    ProductId = cartItem.ProductId,
+                    Quantity = cartItem.Quantity,
+                    ProductName = cartItem.ProductName,
+                    BrandName = cartItem.BrandName,
+                    CategoryName = cartItem.CategoryName,
+                    Price = cartItem.Price,
+                    PictureUrl = cartItem.PictureUrl
+                };
+
+                mappedCartItemsDto.Add(mappedCartItem);
+            }
 
             var mappedUpdatedCart = new CartDto
             {
                 id = updatedCart.id,
                 shippingCost = updatedCart.shippingCost.Value,
-                cartItems = updatedCart.cartItems
+                cartItems = mappedCartItemsDto
             };
 
             return mappedUpdatedCart;

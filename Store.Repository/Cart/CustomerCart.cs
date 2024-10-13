@@ -13,5 +13,7 @@ namespace Store.Repository.Cart
         public double ? shippingCost { get; set; }
 
         public List<CartItem>? cartItems { get; set; }
+        public string? PaymentIntentId { get; set; }
+        public string? ClientSecret { get; set; }
     }
 }

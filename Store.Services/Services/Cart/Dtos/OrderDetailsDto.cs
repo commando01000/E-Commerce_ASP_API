@@ -19,8 +19,9 @@ namespace Store.Services.Services.Cart.Dtos
         public IReadOnlyList<OrderItemDto> OrderItems { get; set; }
         public OrderPaymentStatus OrderPaymentStatus { get; set; }
         public double ShippingPrice { get; set; }
-        public string? CartId { get; set; }
+        public Guid? CartId { get; set; }
         public double subTotal { get; set; }
         public double GetTotal { get; set; }
+        public string? PaymentIntentId { get; set; }
     }
 }

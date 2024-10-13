@@ -20,7 +20,7 @@ namespace Store.Services.Services.Ordersz
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
 
-        public OrderService(ICartService cartService, IUnitOfWork unitOfWork,IMapper mapper)
+        public OrderService(ICartService cartService, IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.cartService = cartService;
             this.unitOfWork = unitOfWork;
@@ -50,7 +50,7 @@ namespace Store.Services.Services.Ordersz
                     PictureUrl = product.PictureUrl,
                     Price = product.Price
                 };
-                
+
                 var orderItem = new OrderItem
                 {
                     Price = product.Price,
@@ -92,7 +92,7 @@ namespace Store.Services.Services.Ordersz
             var mappedShippedAddress = mapper.Map<ShippingAddressDto>(order.ShippingAddressDto);
 
             var shippedAddress = mapper.Map<ShippingAddress>(order.ShippingAddressDto);
-            
+
             var orderItems = mapper.Map<List<OrderItem>>(OrderItems);
             var Order = new Order
             {
@@ -185,7 +185,11 @@ namespace Store.Services.Services.Ordersz
 
         public async Task<IReadOnlyList<OrderDto>> GetOrders()
         {
-            throw new NotImplementedException();
+            var Orders = unitOfWork.Repository<Order, Guid>().GetAll();
+
+            var mappedOrders = mapper.Map<IReadOnlyList<OrderDto>>(Orders);
+
+            return mappedOrders;
         }
 
         public async Task<IReadOnlyList<OrderDetailsDto>> GetOrdersForCustomer(string BuyerEmail)

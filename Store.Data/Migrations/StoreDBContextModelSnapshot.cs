@@ -67,8 +67,8 @@ namespace Store.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CartId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("CartId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -79,8 +79,14 @@ namespace Store.Data.Migrations
                     b.Property<DateTimeOffset>("OrderDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<int>("OrderPaymentStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("subTotal")
                         .HasColumnType("float");

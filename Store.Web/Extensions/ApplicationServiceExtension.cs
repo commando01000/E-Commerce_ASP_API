@@ -10,6 +10,8 @@ using Store.Services.Services.Cart.CartServices;
 using Store.Services.Services.TokenServices;
 using Store.Services.Services.UserServices;
 using Store.Services.Services.Orders;
+using Store.Services.Services.Ordersz;
+using AutoMapper;
 
 namespace Store.Web.Extensions
 {
@@ -24,7 +26,7 @@ namespace Store.Web.Extensions
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
-
+            services.AddAutoMapper(typeof(IMapper));
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

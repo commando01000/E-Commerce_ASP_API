@@ -17,9 +17,10 @@ namespace Store.Data.Entities
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
         public OrderPaymentStatus OrderPaymentStatus { get; set; }
         public IReadOnlyList<OrderItem> OrderItems { get; set; }
-        public string? CartId { get; set; }
+        public Guid? CartId { get; set; }
         public double subTotal { get; set; }
         public double GetTotal()
             => subTotal + DeliveryMethod.Price;
+        public string? PaymentIntentId { get; set; }
     }
 }

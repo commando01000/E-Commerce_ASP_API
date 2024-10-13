@@ -9,7 +9,7 @@ namespace Store.Services.Services.Cart.Dtos
 {
     public class OrderDto
     {
-        public string CartId;
+        public Guid CartId;
         public string BuyerEmail;
         public ShippingAddressDto ShippingAddressDto;
         public List<OrderItemDto> Items = new List<OrderItemDto>();

@@ -15,5 +15,7 @@ namespace Store.Repository.Cart
         public List<CartItem>? cartItems { get; set; }
         public string? PaymentIntentId { get; set; }
         public string? ClientSecret { get; set; }
+
+        public int? DeliveryMethodId { get; set; }
     }
 }

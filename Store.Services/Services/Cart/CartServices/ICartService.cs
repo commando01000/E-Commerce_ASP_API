@@ -12,8 +12,8 @@ namespace Store.Services.Services.Cart.CartServices
     {
         public Task<CartDto> UpdateAsync(CartDto cart);
 
-        public Task<CartDto> GetAsync(Guid id);
+        public Task<CartDto> GetAsync(string id);
 
-        public Task<bool> DeleteAsync(Guid id);
+        public Task<bool> DeleteAsync(string id);
     }
 }

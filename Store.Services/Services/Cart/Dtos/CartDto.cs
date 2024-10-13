@@ -11,6 +11,6 @@ namespace Store.Services.Services.Cart.Dtos
     {
         public string? id { get; set; }
         public double shippingCost { get; set; }
-        public List<CartItem> cartItems { get; set; } = new List<CartItem>();
+        public List<CartItemDto> cartItems { get; set; } = new List<CartItemDto>();
     }
 }

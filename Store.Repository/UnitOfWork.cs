@@ -30,6 +30,12 @@ namespace Store.Repository
             }
             else
             {
+                if (!_repositories.ContainsKey(typeof(TEntity).Name))
+                {
+                    var RepoType = typeof(GenericRepository<,>);
+                    var RepoInstance = Activator.CreateInstance(RepoType.MakeGenericType(typeof(TEntity), typeof(TKey)), _context);
+                    _repositories.Add(typeof(TEntity).Name, RepoInstance);
+                }
                 return (IGenericRepository<TEntity, TKey>)_repositories[EntityKey];
             }
         }

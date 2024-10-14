@@ -13,6 +13,7 @@ using Store.Services.Services.Orders;
 using Store.Services.Services.Ordersz;
 using AutoMapper;
 using Store.Services.Services.Payment;
+using Store.Services.Services.Profiles;
 
 namespace Store.Web.Extensions
 {
@@ -28,7 +29,7 @@ namespace Store.Web.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IPaymentService, PaymentService>();
-            services.AddAutoMapper(typeof(IMapper));
+            services.AddAutoMapper(typeof(OrderProfile));
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

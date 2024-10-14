@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Store.Data.Entities;
 using Store.Repository.Interfaces;
+using Store.Repository.Specifications;
 using Store.Repository.Specifications.OrderSpecs;
 using Store.Services.Services.Cart.CartServices;
 using Store.Services.Services.Cart.Dtos;
@@ -10,6 +11,7 @@ using Store.Services.Services.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,7 +44,8 @@ namespace Store.Services.Services.Ordersz
 
             foreach (var CartItem in Cart.cartItems)
             {
-                var product = await unitOfWork.Repository<Product, int>().GetById(CartItem.ProductId);
+                var Product_Specs = new ProductWithSpecifications(CartItem.ProductId);
+                var product = await unitOfWork.Repository<Product, int>().GetByIdWithSpecifications(Product_Specs);
 
                 if (product is null)
                     throw new Exception($"Product With Id {CartItem.ProductId} Not Exist");
@@ -107,6 +110,7 @@ namespace Store.Services.Services.Ordersz
                 BuyerEmail = order.BuyerEmail,
                 CartId = order.CartId,
                 PaymentIntentId = Cart.PaymentIntentId,
+                BuyerName = ClaimTypes.GivenName
             };
 
             await unitOfWork.Repository<Order, Guid>().AddAsync(Order);

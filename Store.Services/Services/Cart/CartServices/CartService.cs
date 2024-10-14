@@ -43,7 +43,7 @@ namespace Store.Services.Services.Cart.CartServices
                     BrandName = cartItem.BrandName,
                     CategoryName = cartItem.CategoryName,
                     Price = cartItem.Price,
-                    PictureUrl = cartItem.PictureUrl
+                    PictureUrl = cartItem.PictureUrl,
                 };
 
                 mappedCartItems.Add(mappedCartItem);
@@ -53,7 +53,10 @@ namespace Store.Services.Services.Cart.CartServices
             {
                 id = cart.id,
                 shippingCost = cart.shippingCost.Value,
-                cartItems = mappedCartItems
+                cartItems = mappedCartItems,
+                DeliveryMethodId = cart.DeliveryMethodId,
+                //ClientSecret = cart.ClientSecret,
+                //PaymentIntentId = cart.PaymentIntentId
             };
 
             return mappedCart;
@@ -86,7 +89,9 @@ namespace Store.Services.Services.Cart.CartServices
             {
                 id = cart.id,
                 shippingCost = cart.shippingCost,
-                cartItems = mappedCartItems
+                cartItems = mappedCartItems,
+                DeliveryMethodId = cart.DeliveryMethodId,
+                PaymentIntentId = cart.PaymentIntentId
             };
 
             var updatedCart = await _cartRepository.UpdateAsync(mappedCart);
@@ -113,7 +118,9 @@ namespace Store.Services.Services.Cart.CartServices
             {
                 id = updatedCart.id,
                 shippingCost = updatedCart.shippingCost.Value,
-                cartItems = mappedCartItemsDto
+                cartItems = mappedCartItemsDto,
+                DeliveryMethodId = updatedCart.DeliveryMethodId,
+                PaymentIntentId = updatedCart.PaymentIntentId
             };
 
             return mappedUpdatedCart;

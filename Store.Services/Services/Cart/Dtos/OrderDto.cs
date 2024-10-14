@@ -9,11 +9,11 @@ namespace Store.Services.Services.Cart.Dtos
 {
     public class OrderDto
     {
-        public Guid CartId;
-        public string BuyerEmail;
-        public ShippingAddressDto ShippingAddressDto;
+        public Guid CartId { get; set; }
+        public string BuyerEmail { get; set; }
+        public ShippingAddressDto ShippingAddressDto { get; set; }
         public List<OrderItemDto> Items = new List<OrderItemDto>();
         [Required]
-        public int DeliveryMethodId;
+        public int DeliveryMethodId { get; set; }
     }
 }

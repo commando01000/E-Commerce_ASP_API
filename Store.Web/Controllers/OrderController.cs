@@ -13,7 +13,7 @@ namespace Store.Web.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService orderService;
@@ -22,6 +22,8 @@ namespace Store.Web.Controllers
         {
             this.orderService = orderService;
         }
+        
+        [HttpPost]
         public async Task <ActionResult<OrderDetailsDto>> CreateOrderAsync(OrderDto orderDto)
         {
             var order = await orderService.AddOrder(orderDto);

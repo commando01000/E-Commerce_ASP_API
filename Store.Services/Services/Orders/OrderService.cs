@@ -6,6 +6,7 @@ using Store.Repository.Specifications.OrderSpecs;
 using Store.Services.Services.Cart.CartServices;
 using Store.Services.Services.Cart.Dtos;
 using Store.Services.Services.Orders;
+using Store.Services.Services.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,14 @@ namespace Store.Services.Services.Ordersz
         private readonly ICartService cartService;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IPaymentService paymentService;
 
-        public OrderService(ICartService cartService, IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(ICartService cartService, IUnitOfWork unitOfWork, IMapper mapper, IPaymentService paymentService)
         {
             this.cartService = cartService;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.paymentService = paymentService;
         }
         public async Task<OrderDetailsDto> AddOrder(OrderDto order)
         {
@@ -77,6 +80,13 @@ namespace Store.Services.Services.Ordersz
             var SubTotal = OrderItems.Sum(oi => oi.Quantity * oi.Price);
 
             #region Payment
+            var specs = new OrderWithPaymentIntentSpecifications(Cart.PaymentIntentId);
+
+            var existingOrder = await unitOfWork.Repository<Order, Guid>().GetByIdWithSpecifications(specs);
+
+            if (existingOrder is null)
+                await paymentService.CreateOrUpdatePaymentIntent(Cart);
+
 
             #endregion
 
@@ -96,9 +106,11 @@ namespace Store.Services.Services.Ordersz
                 OrderDate = DateTime.Now,
                 BuyerEmail = order.BuyerEmail,
                 CartId = order.CartId,
+                PaymentIntentId = Cart.PaymentIntentId,
             };
 
             await unitOfWork.Repository<Order, Guid>().AddAsync(Order);
+            await unitOfWork.CompleteAsync();
 
             var mappedOrder = mapper.Map<OrderDetailsDto>(Order);
 
@@ -112,6 +124,7 @@ namespace Store.Services.Services.Ordersz
                 throw new Exception($"Order With Id {id} Not Exist");
 
             unitOfWork.Repository<Order, Guid>().DeleteAsync(Order);
+            await unitOfWork.CompleteAsync();
 
             return true;
         }

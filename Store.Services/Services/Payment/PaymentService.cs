@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Store.Data.Entities;
 using Store.Repository.Cart;
 using Store.Repository.Interfaces;
+using Store.Repository.Specifications.OrderSpecs;
 using Store.Services.Services.Cart.CartServices;
 using Store.Services.Services.Cart.Dtos;
 using Stripe;
@@ -19,18 +21,21 @@ namespace Store.Services.Services.Payment
         private readonly IConfiguration configuration;
         private readonly IUnitOfWork unitOfWork;
         private readonly ICartService cartService;
+        private readonly IMapper mapper;
 
-        public PaymentService(IConfiguration configuration, IUnitOfWork unitOfWork, ICartService cartService)
+        public PaymentService(IConfiguration configuration, IUnitOfWork unitOfWork, ICartService cartService, IMapper mapper)
         {
             this.configuration = configuration;
             this.unitOfWork = unitOfWork;
             this.cartService = cartService;
+            this.mapper = mapper;
         }
         public async Task<CartDto> CreateOrUpdatePaymentIntent(CartDto cartDto)
         {
             StripeConfiguration.ApiKey = configuration["StripeSettings:SecretKey"];
             if (cartDto is null)
                 throw new Exception("Cart is null");
+            
             var deliveryMethod = await unitOfWork.Repository<DeliveryMethod, int>().GetById(cartDto.DeliveryMethodId.Value);
 
             double shippingPrice = deliveryMethod.Price;
@@ -75,14 +80,49 @@ namespace Store.Services.Services.Payment
             return cartDto;
         }
 
-        public Task<OrderDetailsDto> UpdateOrderPaymentFailed(string paymentIntentId)
+        public async Task<OrderDetailsDto> UpdateOrderPaymentFailed(string paymentIntentId)
         {
-            throw new NotImplementedException();
+            var specs = new OrderWithItemSpecifications(paymentIntentId);
+
+            var order = await unitOfWork.Repository<Order, Guid>().GetByIdWithSpecifications(specs);
+
+            if (order is null)
+            {
+                throw new Exception("Order does not exist");
+            }
+            else
+            {
+                order.OrderPaymentStatus = OrderPaymentStatus.PaymentFailed;
+                unitOfWork.Repository<Order, Guid>().UpdateAsync(order);
+                await unitOfWork.CompleteAsync();
+                await cartService.DeleteAsync(order.CartId.Value);
+
+                var mappedOrder = mapper.Map<OrderDetailsDto>(order);
+
+                return mappedOrder;
+            }
         }
 
-        public Task<OrderDetailsDto> UpdateOrderPaymentSucceeded(string paymentIntentId)
+        public async Task<OrderDetailsDto> UpdateOrderPaymentSucceeded(string paymentIntentId)
         {
-            throw new NotImplementedException();
+            var specs = new OrderWithItemSpecifications(paymentIntentId);
+
+            var order = await unitOfWork.Repository<Order, Guid>().GetByIdWithSpecifications(specs);
+
+            if (order is null)
+            {
+                throw new Exception("Order does not exist");
+            }
+            else
+            {
+                order.OrderPaymentStatus = OrderPaymentStatus.Pending;
+                unitOfWork.Repository<Order, Guid>().UpdateAsync(order);
+                await unitOfWork.CompleteAsync();
+
+                var mappedOrder = mapper.Map<OrderDetailsDto>(order);
+
+                return mappedOrder;
+            }
         }
     }
 }

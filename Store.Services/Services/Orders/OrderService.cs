@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Store.Data.Entities;
 using Store.Repository.Interfaces;
 using Store.Repository.Specifications;
@@ -23,13 +24,15 @@ namespace Store.Services.Services.Ordersz
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IPaymentService paymentService;
+        private readonly IConfiguration configurtion;
 
-        public OrderService(ICartService cartService, IUnitOfWork unitOfWork, IMapper mapper, IPaymentService paymentService)
+        public OrderService(ICartService cartService, IUnitOfWork unitOfWork, IMapper mapper, IPaymentService paymentService, IConfiguration configurtion)
         {
             this.cartService = cartService;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.paymentService = paymentService;
+            this.configurtion = configurtion;
         }
         public async Task<OrderDetailsDto> AddOrder(OrderDto order)
         {
@@ -53,7 +56,7 @@ namespace Store.Services.Services.Ordersz
                 var itemOrdered = new ProductItem
                 {
                     Name = product.Name,
-                    PictureUrl = product.PictureUrl,
+                    PictureUrl = this.configurtion["BaseUrl"] + product.PictureUrl,
                     Price = product.Price
                 };
 

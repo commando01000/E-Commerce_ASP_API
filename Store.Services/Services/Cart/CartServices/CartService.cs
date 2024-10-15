@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Store.Repository.Cart;
 using Store.Repository.Cart.Interfaces;
 using Store.Services.Services.Cart.Dtos;
@@ -13,10 +14,12 @@ namespace Store.Services.Services.Cart.CartServices
     public class CartService : ICartService
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IConfiguration configuration;
 
-        public CartService(ICartRepository cartRepository)
+        public CartService(ICartRepository cartRepository, IConfiguration configuration)
         {
             _cartRepository = cartRepository;
+            this.configuration = configuration;
         }
         public async Task<bool> DeleteAsync(Guid id)
         {
@@ -79,7 +82,7 @@ namespace Store.Services.Services.Cart.CartServices
                     BrandName = cartItem.BrandName,
                     CategoryName = cartItem.CategoryName,
                     Price = cartItem.Price,
-                    PictureUrl = cartItem.PictureUrl
+                    PictureUrl = this.configuration["BaseUrl"] + "images/" + cartItem.PictureUrl
                 };
 
                 mappedCartItems.Add(mappedCartItem);
@@ -91,7 +94,8 @@ namespace Store.Services.Services.Cart.CartServices
                 shippingCost = cart.shippingCost,
                 cartItems = mappedCartItems,
                 DeliveryMethodId = cart.DeliveryMethodId,
-                PaymentIntentId = cart.PaymentIntentId
+                PaymentIntentId = cart.PaymentIntentId,
+                ClientSecret = cart.ClientSecret
             };
 
             var updatedCart = await _cartRepository.UpdateAsync(mappedCart);
@@ -108,7 +112,7 @@ namespace Store.Services.Services.Cart.CartServices
                     BrandName = cartItem.BrandName,
                     CategoryName = cartItem.CategoryName,
                     Price = cartItem.Price,
-                    PictureUrl = cartItem.PictureUrl
+                    PictureUrl = this.configuration["BaseUrl"] + "images/" + cartItem.PictureUrl
                 };
 
                 mappedCartItemsDto.Add(mappedCartItem);
@@ -120,7 +124,8 @@ namespace Store.Services.Services.Cart.CartServices
                 shippingCost = updatedCart.shippingCost.Value,
                 cartItems = mappedCartItemsDto,
                 DeliveryMethodId = updatedCart.DeliveryMethodId,
-                PaymentIntentId = updatedCart.PaymentIntentId
+                PaymentIntentId = updatedCart.PaymentIntentId,
+                ClientSecret = updatedCart.ClientSecret
             };
 
             return mappedUpdatedCart;

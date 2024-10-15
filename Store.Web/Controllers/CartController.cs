@@ -14,10 +14,11 @@ namespace Store.Web.Controllers
         {
             _cartService = cartService;
         }
-        [HttpGet("{id}")]
-        public Task<bool> DeleteAsync(Guid id)
+        [HttpDelete("{id}")]
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await _cartService.DeleteAsync(id);
+            return true;
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<CartDto>> GetAsync(Guid id)

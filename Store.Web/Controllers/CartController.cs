@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Store.Services.Services.Cart.CartServices;
 using Store.Services.Services.Cart.Dtos;
 
@@ -6,6 +7,7 @@ namespace Store.Web.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
+    [Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;

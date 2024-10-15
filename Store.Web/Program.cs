@@ -24,7 +24,7 @@ namespace Store.Web
 
             // Add services to the container.
             builder.Services.AddControllers();
-            
+
             builder.Services.AddDbContext<StoreDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddDbContext<StoreIdentityDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 
@@ -34,6 +34,11 @@ namespace Store.Web
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerDocumentation();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            });
+
             builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
             {
                 return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis"));
@@ -48,9 +53,9 @@ namespace Store.Web
                 {
                     var context = Service.ServiceProvider.GetRequiredService<StoreDBContext>();
                     var context2 = Service.ServiceProvider.GetRequiredService<StoreIdentityDBContext>();
-                    
+
                     var userManager = Service.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-                   
+
                     await context.Database.MigrateAsync();
                     await context2.Database.MigrateAsync();
 
@@ -76,6 +81,8 @@ namespace Store.Web
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

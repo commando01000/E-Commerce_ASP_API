@@ -86,13 +86,13 @@ namespace Store.Services.Services.Ordersz
             var SubTotal = OrderItems.Sum(oi => oi.Quantity * oi.Price);
 
             #region Payment
+           
             var specs = new OrderWithPaymentIntentSpecifications(Cart.PaymentIntentId);
 
             var existingOrder = await unitOfWork.Repository<Order, Guid>().GetByIdWithSpecifications(specs);
 
             if (existingOrder is null)
                 await paymentService.CreateOrUpdatePaymentIntent(Cart);
-
 
             #endregion
 

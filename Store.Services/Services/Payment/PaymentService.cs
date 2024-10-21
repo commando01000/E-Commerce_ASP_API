@@ -35,7 +35,7 @@ namespace Store.Services.Services.Payment
             StripeConfiguration.ApiKey = configuration["StripeSettings:SecretKey"];
             if (cartDto is null)
                 throw new Exception("Cart is null");
-            
+
             var deliveryMethod = await unitOfWork.Repository<DeliveryMethod, int>().GetById(cartDto.DeliveryMethodId.Value);
 
             double shippingPrice = deliveryMethod.Price;

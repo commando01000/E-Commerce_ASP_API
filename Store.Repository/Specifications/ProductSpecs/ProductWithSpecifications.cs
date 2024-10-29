@@ -1,4 +1,5 @@
-﻿using Store.Data.Entities;
+﻿using Microsoft.IdentityModel.Tokens;
+using Store.Data.Entities;
 using Store.Repository.Specifications.ProductSpecs;
 
 namespace Store.Repository.Specifications
@@ -7,7 +8,7 @@ namespace Store.Repository.Specifications
     {
         public ProductWithSpecifications(ProductSpecifications specs) :
              base(product => (!specs.BrandId.HasValue || product.BrandId == specs.BrandId.Value) &&
-                (!specs.CategoryId.HasValue || product.CategoryId == specs.CategoryId.Value) && (specs.Search == null || product.Name.Contains(specs.Search))
+                (!specs.CategoryId.HasValue || product.CategoryId == specs.CategoryId.Value) && (specs.Search.IsNullOrEmpty() || product.Name.Contains(specs.Search))
              )
         {
             AddInclude(product => product.Brand);

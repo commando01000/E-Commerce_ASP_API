@@ -7,7 +7,7 @@ namespace Store.Web.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;

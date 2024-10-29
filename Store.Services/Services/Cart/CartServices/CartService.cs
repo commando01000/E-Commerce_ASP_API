@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Store.Repository.Cart;
 using Store.Repository.Cart.Interfaces;
@@ -15,17 +16,18 @@ namespace Store.Services.Services.Cart.CartServices
     {
         private readonly ICartRepository _cartRepository;
         private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
 
-        public CartService(ICartRepository cartRepository, IConfiguration configuration)
+        public CartService(ICartRepository cartRepository, IConfiguration configuration, IMapper mapper)
         {
             _cartRepository = cartRepository;
             this.configuration = configuration;
+            this.mapper = mapper;
         }
         public async Task<bool> DeleteAsync(Guid id)
         {
             return await _cartRepository.DeleteAsync(id);
         }
-
         public async Task<CartDto> GetAsync(Guid id)
         {
             var cart = await _cartRepository.GetAsync(id);
@@ -64,29 +66,30 @@ namespace Store.Services.Services.Cart.CartServices
 
             return mappedCart;
         }
-
         public async Task<CartDto> UpdateAsync(CartDto cart)
         {
             if (cart.id is null)
                 cart.id = GenerateRandomCartId();
 
 
-            var mappedCartItems = new List<CartItem>();
-            foreach (var cartItem in cart.cartItems)
-            {
-                var mappedCartItem = new CartItem
-                {
-                    ProductId = cartItem.ProductId,
-                    Quantity = cartItem.Quantity,
-                    ProductName = cartItem.ProductName,
-                    BrandName = cartItem.BrandName,
-                    CategoryName = cartItem.CategoryName,
-                    Price = cartItem.Price,
-                    PictureUrl = this.configuration["BaseUrl"] + "images/" + cartItem.PictureUrl
-                };
+            //var mappedCartItems = new List<CartItem>();
+            //foreach (var cartItem in cart.cartItems)
+            //{
+            //    var mappedCartItem = new CartItem
+            //    {
+            //        ProductId = cartItem.ProductId,
+            //        Quantity = cartItem.Quantity,
+            //        ProductName = cartItem.ProductName,
+            //        BrandName = cartItem.BrandName,
+            //        CategoryName = cartItem.CategoryName,
+            //        Price = cartItem.Price,
+            //        PictureUrl = this.configuration["BaseUrl"] + "images/" + cartItem.PictureUrl
+            //    };
 
-                mappedCartItems.Add(mappedCartItem);
-            }
+            //    mappedCartItems.Add(mappedCartItem);
+            //}
+
+            var mappedCartItems = mapper.Map<List<CartItem>>(cart.cartItems);
 
             var mappedCart = new CustomerCart
             {
@@ -100,33 +103,35 @@ namespace Store.Services.Services.Cart.CartServices
 
             var updatedCart = await _cartRepository.UpdateAsync(mappedCart);
 
-            var mappedCartItemsDto = new List<CartItemDto>();
+            //var mappedCartItemsDto = new List<CartItemDto>();
 
-            foreach (var cartItem in cart.cartItems)
-            {
-                var mappedCartItem = new CartItemDto
-                {
-                    ProductId = cartItem.ProductId,
-                    Quantity = cartItem.Quantity,
-                    ProductName = cartItem.ProductName,
-                    BrandName = cartItem.BrandName,
-                    CategoryName = cartItem.CategoryName,
-                    Price = cartItem.Price,
-                    PictureUrl = this.configuration["BaseUrl"] + "images/" + cartItem.PictureUrl
-                };
+            //foreach (var cartItem in cart.cartItems)
+            //{
+            //    var mappedCartItem = new CartItemDto
+            //    {
+            //        ProductId = cartItem.ProductId,
+            //        Quantity = cartItem.Quantity,
+            //        ProductName = cartItem.ProductName,
+            //        BrandName = cartItem.BrandName,
+            //        CategoryName = cartItem.CategoryName,
+            //        Price = cartItem.Price,
+            //        PictureUrl = this.configuration["BaseUrl"] + "images/" + cartItem.PictureUrl
+            //    };
 
-                mappedCartItemsDto.Add(mappedCartItem);
-            }
+            //    mappedCartItemsDto.Add(mappedCartItem);
+            //}
 
-            var mappedUpdatedCart = new CartDto
-            {
-                id = updatedCart.id,
-                shippingCost = updatedCart.shippingCost.Value,
-                cartItems = mappedCartItemsDto,
-                DeliveryMethodId = updatedCart.DeliveryMethodId,
-                PaymentIntentId = updatedCart.PaymentIntentId,
-                ClientSecret = updatedCart.ClientSecret
-            };
+            //var mappedUpdatedCart = new CartDto
+            //{
+            //    id = updatedCart.id,
+            //    shippingCost = updatedCart.shippingCost.Value,
+            //    cartItems = mappedCartItemsDto,
+            //    DeliveryMethodId = updatedCart.DeliveryMethodId,
+            //    PaymentIntentId = updatedCart.PaymentIntentId,
+            //    ClientSecret = updatedCart.ClientSecret
+            //};
+
+            var mappedUpdatedCart = mapper.Map<CartDto>(updatedCart);
 
             return mappedUpdatedCart;
         }
